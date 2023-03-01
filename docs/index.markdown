@@ -1,16 +1,6 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: default
+title: Articles
 ---
 
-# Test
-
-## TEST
-
-```scala
-val toto = "x"
-```
-
-**bold**
+- [Using Tapir in a Play Framework application](./tapir_play.markdown)

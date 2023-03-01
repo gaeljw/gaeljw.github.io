@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Using Tapir in a Play Framework application
-description: THow can we get all the Tapir benefits in a Play Framework application?
+description: How can we get all the Tapir benefits in a Play Framework application?
 ---
 
 # 🤩 Which benefits?

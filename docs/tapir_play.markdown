@@ -7,6 +7,8 @@ description: How can we get all the Tapir benefits in a Play Framework applicati
 * Do not remove this line (it will not be displayed)
 {:toc}
 
+-----
+
 # 🤩 Which benefits?
 
 If you are reading this, you probably already know what Tapir does and why it’s a great library for describing endpoints in a Scala application. But what does it bring specifically to Play Framework applications?

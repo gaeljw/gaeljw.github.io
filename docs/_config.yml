@@ -30,7 +30,8 @@ github_username:  gaeljw
 
 # Build settings
 #theme: cayman
-remote_theme: pages-themes/cayman@v0.2.0
+#remote_theme: pages-themes/cayman@v0.2.0
+remote_theme: YinAoXiong/cayman@master
 plugins:
   - jekyll-feed
   - jekyll-remote-theme

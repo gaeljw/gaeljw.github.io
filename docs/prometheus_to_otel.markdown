@@ -9,6 +9,8 @@ description: Concrete steps & tips to migrate your JVM applications from Prometh
 
 -----
 
+_2023-06: updated for OpenTelemetry 1.27.x. New runtime-telemetry module and JVM metrics renamed._
+
 _Content of this article has been written with the OpenTelemetry version 1.21.x available as of December 2022. Post a comment if you notice something which is obsolete at the time of reading._
 
 -----
@@ -113,7 +115,7 @@ And add the following ones as a replacement:
 </dependency>
 <dependency>
     <groupId>io.opentelemetry.instrumentation</groupId>
-    <artifactId>opentelemetry-runtime-metrics</artifactId>
+    <artifactId>opentelemetry-runtime-telemetry-java17</artifactId>
 </dependency>
 ```
 
@@ -131,7 +133,7 @@ Each dependency declared above plays a different role:
 
 - `opentelemetry-exporter-prometheus` is the dependency needed to expose metrics as a Prometheus Exporter. If we were to push metrics directly to OpenTelemetry Collector, this would not be needed.
 
-- `opentelemetry-runtime-metrics` is the equivalent of Prometheus’ `simpleclient_hotspot`: it will allow exposing JVM metrics. If you don’t care about JVM metrics, you can skip this one.
+- `opentelemetry-runtime-telemetry-java17` is the equivalent of Prometheus’ `simpleclient_hotspot`: it will allow exposing JVM metrics. If you don’t care about JVM metrics, you can skip this one. There's also a `opentelemetry-runtime-telemetry-java8` if you're not using Java17+ yet.
 
 ## JVM metrics
 
@@ -149,7 +151,7 @@ The same can be achieved with OpenTelemetry with the following code:
 
 ```java
 import io.opentelemetry.api.OpenTelemetry
-import io.opentelemetry.instrumentation.runtimemetrics.*
+import io.opentelemetry.instrumentation.runtimemetrics.java17.*
 
 OpenTelemetry otel = ... // Will be provided later (more below)
 
@@ -455,5 +457,5 @@ Community dashboards making use of OpenTelemetry metrics are still rare. Do not 
 
 Here are two dashboards that I created:
 
-- JVM overview: [https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/](https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/)
+- JVM overview: [https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/](https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/) (for OpenTelemetry <1.27, suffixes to be added to metric names for OpenTelemetry >= 1.27)
 - Hikari CP: [https://grafana.com/grafana/dashboards/17653-hikaricp-connection-pools-opentelemetry/](https://grafana.com/grafana/dashboards/17653-hikaricp-connection-pools-opentelemetry/)

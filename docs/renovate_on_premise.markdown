@@ -9,9 +9,11 @@ description: How to self-host and run Renovate against your private Gitlab repos
 
 -----
 
+_This article is not meant as a duplicate of the official documentation but rather as a walkthrough guide for self-hosting Renovate._
+ 
 > _I wrote this article because the [official documentation](https://github.com/renovatebot/renovate/blob/main/docs/usage/getting-started/running.md) felt messy to me and I spent several hours figuring out the correct combination of parameters to use to run properly._
-> 
-> _This article is not meant as a duplicate of the official documentation but rather as a walkthrough guide for self-hosting Renovate._
+
+_Last update: 2023-08 with Renovate v36.49.0_
 
 -----
 
@@ -154,7 +156,7 @@ podman run --rm \
     -e "RENOVATE_TOKEN" \
     -e "RENOVATE_PLATFORM" \
     -e "RENOVATE_ENDPOINT" \
-    renovate/renovate:36.27.2
+    renovate/renovate:36.49.0
 ```
 
 Note that:
@@ -183,7 +185,7 @@ stages:
 
 renovate:
   stage: renovate
-  image: renovate/renovate:36.27.2
+  image: renovate/renovate:36.49.0
   script:
     - renovate
 ```
@@ -333,3 +335,28 @@ If you need to troubleshoot any behaviour, the easiest way is to change the log 
 To do so, you can set the environment variable `LOG_LEVEL=debug` in the same way as other variables.
 
 This will give you a lot more details at what Renovate is doing.
+
+## Using private registries
+
+If you're using private registries, like a private Artifactory instance, you can configure Renovate to target them rather than the default ones with a setup like following:
+
+```json
+{
+  "packageRules": [
+    {
+        "matchDatasources": ["maven"],
+        "registryUrls": [
+            "https://artifactory.mycompany.net/artifactory/maven-repo"
+        ]
+    }
+  ]
+}
+```
+
+## Using registries with a self-signed certificate
+
+If you're using registries with a self-signed certificate, like a private Artifactory instance, you'll need to give the CA certificate to Renovate so HTTPS connections to the registries are possible.
+
+To do so, you need to mount or inject somehow the certificate file in the Renovate container and set the `SSL_CERT_FILE` environment variable to the path of the file.
+
+The actual setup will vary depending how you are able to retrieve the file.

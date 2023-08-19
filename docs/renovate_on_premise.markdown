@@ -17,7 +17,7 @@ _Last update: 2023-08 with Renovate v36.49.0_
 
 -----
 
-# What is Renovate?
+# 🛠️ What is Renovate?
 
 [Renovate](https://github.com/renovatebot/renovate) is a tool to **automate your dependencies updates**.
 
@@ -29,7 +29,7 @@ Renovate will look at your project source code, detect dependencies that are bei
 
 It's similar to Github's own [Dependabot](https://docs.github.com/en/code-security/dependabot) or specific tools available in some languages (like [Scala Steward](https://github.com/scala-steward-org/scala-steward) for Scala) but way more flexible and customizable.
 
-# Why use it?
+# 💡 Why use it?
 
 **Having dependencies out-of-date is a major security risk** as vulnerabilities are being discovered and exploited on a daily basis. On the other hand, manually checking for new versions of dependencies is excessively time consuming.
 
@@ -41,7 +41,7 @@ Moreover, the community is very reactive when you have questions or potential is
 
 IMHO, this makes Renovate a must-have in every organisation.
 
-# Running on-premise
+# 🧰 Running on-premise
 
 Renovate can run in different ways. This article will focus on the steps needed to run it on-premise.
 
@@ -61,7 +61,7 @@ We'll run Renovate by using the official container image (using Podman or Docker
 
 -----
 
-# Setup
+# ✍️ Setup
 
 In order to run, Renovate need some configurations.
 
@@ -196,7 +196,7 @@ Note that:
 - the Renovate image version (tag) is fixed, but it could be made an environment variable as well and/or use `latest` if you don't mind potential breaking changes in Renovate
 
 
-# Let it run!
+# 🚀 Let it run!
 
 Run your job once manually to see the results.
 
@@ -227,7 +227,7 @@ Bear in mind that if your project has many dependencies not up-to-date, it will 
 
 -----
 
-# Going further
+# ⏭️ Going further
 
 ## Define configurations in a central place (Config Presets)
 
@@ -326,7 +326,7 @@ renovate:
 
 It's necessary to override the `RENOVATE_BASE_DIR` as Gitlab CI can only cache items of the working directory.
 
-# Tips
+# ℹ️ Tips
 
 ## Troubleshooting issues
 

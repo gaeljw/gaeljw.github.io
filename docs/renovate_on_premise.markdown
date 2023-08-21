@@ -112,6 +112,8 @@ module.exports = {
 };
 ```
 
+Renovate can also be setup to “autodiscover” projects, see more below.
+
 ### Other configurations
 
 As a start, this is all we need in the configuration file. We may add other configurations later (see more in the ["Going Further"](#going-further) section).
@@ -228,6 +230,23 @@ Bear in mind that if your project has many dependencies not up-to-date, it will 
 -----
 
 # ⏭️ Going further
+
+## Autodiscover projects
+
+So far, we've seen a setup where the list of projects to be renovated is manually managed. This can quickly become hard to keep up to date.
+
+That's why Renovate also has a "autodiscover" feature which will find all projects it has access to (using the Gitlab token) and run Renovate on it.
+
+To enable it, in the `config.js` file, use the [`autodiscover`](https://docs.renovatebot.com/self-hosted-configuration/#autodiscover) and optionally the [`autodiscoverFilter`](https://docs.renovatebot.com/self-hosted-configuration/#autodiscoverfilter) options:
+
+```js
+{
+    autodiscover: true,
+    autodiscoverFilter: ["some-group/*"],
+    // Remove the existing repositories configuration
+    // repositories: []
+}
+```
 
 ## Define configurations in a central place (Config Presets)
 

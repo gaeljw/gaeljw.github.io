@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Running Renovate on premise
+title: Running Renovate on-premise with Gitlab, Jenkins or any tool
 description: How to self-host and run Renovate against your private Gitlab repositories
 ---
 

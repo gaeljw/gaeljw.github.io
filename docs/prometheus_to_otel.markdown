@@ -9,9 +9,11 @@ description: Concrete steps & tips to migrate your JVM applications from Prometh
 
 -----
 
+_2024-02: updated for OpenTelemetry 1.35.x and JVM instrumentation 2.1.x. JVM metrics renamed._
+
 _2023-06: updated for OpenTelemetry 1.27.x. New runtime-telemetry module and JVM metrics renamed._
 
-_Content of this article has been written with the OpenTelemetry version 1.21.x available as of December 2022. Post a comment if you notice something which is obsolete at the time of reading._
+_Content of this article has been written with the OpenTelemetry version 1.21.x available as of December 2022. Post a comment if you notice something obsolete at the time of reading._
 
 -----
 
@@ -22,7 +24,7 @@ When someone mentions OpenTelemetry, it can actually refer to several things as 
 - a language-agnostic standard with a set of specifications for the 3 telemetry data types: metrics, traces and logs
 - libraries for almost every language
 - a protocol: OpenTelemetry Protocol (also known as OTLP)
-- a “collector” to receive, process and export telemetry data
+- a “collector” to receive, process, and export telemetry data
 
 It’s also important to note that OpenTelemetry is vendor-agnostic and allows you to use any “backend” you want for storing/analyzing telemetry data: Prometheus, Datadog, New Relic…
 
@@ -32,7 +34,7 @@ The main reasons for migrating to OpenTelemetry are:
 
 - be vendor-agnostic so that you don’t have to rewrite your applications if you change your backend provider in the future
 - benefit from features not available in some vendors API
-- unify the different types of telemetry data (metrics, traces and logs) in a consistent cross-language API
+- unify the different types of telemetry data (metrics, traces, and logs) in a consistent cross-language API
 - standardize your telemetry data pipelines (thanks to the OpenTelemetry Collector)
 
 ## Architecture
@@ -125,7 +127,7 @@ As always, check out the latest available versions of OpenTelemetry dependencies
 
 Each dependency declared above plays a different role:
 
-- `opentelemetry-sdk` is the main dependency which will allow you to both define metrics and expose them. It’s a wrapper of other dependencies.
+- `opentelemetry-sdk` is the main dependency that will allow you to both define metrics and expose them. It’s a wrapper of other dependencies.
     
     It includes `opentelemetry-api`. If you are writing a library, you should depend only on the API.
 
@@ -151,12 +153,11 @@ The same can be achieved with OpenTelemetry with the following code:
 
 ```java
 import io.opentelemetry.api.OpenTelemetry
-import io.opentelemetry.instrumentation.runtimemetrics.java17.*
+import io.opentelemetry.instrumentation.runtimemetrics.java8.*
 
 OpenTelemetry otel = ... // Will be provided later (more below)
 
 MemoryPools.registerObservers(otel);
-BufferPools.registerObservers(otel);
 Classes.registerObservers(otel);
 Cpu.registerObservers(otel);
 Threads.registerObservers(otel);
@@ -169,7 +170,7 @@ You can also notice we are talking about “**observers**” because these are m
 
 As of the day of writing these lines, there are slightly less JVM metrics exposed by OpenTelemetry than by Prometheus but all the major are most useful are. This might be of course evolve quickly if the community asks for it.
 
-Lastly, OpenTelemetry also tries to standardize the metrics names across languages and frameworks. As a consequence, the JVM metrics names are different between Prometheus and OpenTelemetry. See below a non-exhaustive mapping:
+Lastly, OpenTelemetry also tries to standardize the names of the metrics across languages and frameworks. As a consequence, the JVM metrics names are different between Prometheus and OpenTelemetry. See below a non-exhaustive mapping:
 
 ```
 Prometheus -> OpenTelemetry
@@ -178,12 +179,12 @@ Prometheus -> OpenTelemetry
 pool -> pool_name
 
 # Metrics
-jvm_buffer_pool_xxx -> process_runtime_jvm_buffer_xxx
-jvm_classes_xxx -> process_runtime_jvm_classes_xxx
-jvm_memory_pool_bytes_xxx -> process_runtime_jvm_memory_xxx
-jvm_memory_bytes_xxx -> process_runtime_jvm_memory_xxx
-jvm_threads_xxx -> process_runtime_jvm_threads_xxx
-jvm_gc_collection_xxx -> process_runtime_jvm_gc_xxx
+jvm_buffer_pool_xxx -> not available yet in the public OTEL API (only in internal)
+jvm_classes_xxx -> jvm_class_xxx
+jvm_memory_pool_bytes_xxx -> jvm_memory_xxx
+jvm_memory_bytes_xxx -> jvm_memory_xxx
+jvm_threads_xxx -> jvm_thread_xxx
+jvm_gc_collection_xxx -> jvm_gc_xxx
 ```
 
 ## Custom metrics definition
@@ -457,5 +458,5 @@ Community dashboards making use of OpenTelemetry metrics are still rare. Do not 
 
 Here are two dashboards that I created:
 
-- JVM overview: [https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/](https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/) (for OpenTelemetry <1.27, suffixes to be added to metric names for OpenTelemetry >= 1.27)
+- JVM overview: [https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/](https://grafana.com/grafana/dashboards/17582-jmx-overview-opentelemetry/)
 - Hikari CP: [https://grafana.com/grafana/dashboards/17653-hikaricp-connection-pools-opentelemetry/](https://grafana.com/grafana/dashboards/17653-hikaricp-connection-pools-opentelemetry/)

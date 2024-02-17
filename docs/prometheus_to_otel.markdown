@@ -172,20 +172,16 @@ As of the day of writing these lines, there are slightly less JVM metrics expose
 
 Lastly, OpenTelemetry also tries to standardize the names of the metrics across languages and frameworks. As a consequence, the JVM metrics names are different between Prometheus and OpenTelemetry. See below a non-exhaustive mapping:
 
-```
-Prometheus -> OpenTelemetry
+| Prometheus                  | OpenTelemetry                                               |
+|-----------------------------|-------------------------------------------------------------|
+| `pool` (label)              | `pool_name`                                                 |
+| `jvm_buffer_pool_xxx`       | Not available yet in the public OTEL API (only in internal) |
+| `jvm_classes_xxx`           | `jvm_class_xxx`                                             |
+| `jvm_memory_pool_bytes_xxx` | `jvm_memory_xxx`                                            |
+| `jvm_memory_bytes_xxx`      | `jvm_memory_xxx`                                            |
+| `jvm_threads_xxx`           | `jvm_thread_xxx`                                            |
+| `jvm_gc_collection_xxx`     | `jvm_gc_xxx`                                                |
 
-# Labels
-pool -> pool_name
-
-# Metrics
-jvm_buffer_pool_xxx -> not available yet in the public OTEL API (only in internal)
-jvm_classes_xxx -> jvm_class_xxx
-jvm_memory_pool_bytes_xxx -> jvm_memory_xxx
-jvm_memory_bytes_xxx -> jvm_memory_xxx
-jvm_threads_xxx -> jvm_thread_xxx
-jvm_gc_collection_xxx -> jvm_gc_xxx
-```
 
 ## Custom metrics definition
 

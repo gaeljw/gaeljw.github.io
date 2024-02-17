@@ -534,6 +534,17 @@ Gauges still exist in OpenTelemetry for other use cases.
 
 A lot of libraries and frameworks can be instrumented in the same way that we added JVM metrics previously.
 
+For instance:
+
+- Frameworks/servers: Akka, Jetty, Spring, Vertx
+- Database connections pools: Apache DBCP, c3p0, HikariCP
+- Databases: Cassandra, Elasticsearch
+- Libraries: Guava, Hibernate
+
+The complete list of instrumentations supported by OpenTelemetry is available directly on their GitHub: [https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation).
+
+Other instrumentations might be offered by the community in other projects.
+
 ### Auto instrumentation
 
 Metrics of the libraries or frameworks you use will be exposed automatically.
@@ -554,13 +565,6 @@ OTEL_INSTRUMENTATION_AKKA_ACTOR_ENABLED=false
 
 ### Manual instrumentation
 
-For instance:
-
-- Frameworks/servers: Akka, Jetty, Spring, Vertx
-- Database connections pools: Apache DBCP, c3p0, HikariCP
-- Databases: Cassandra, Elasticsearch
-- Libraries: Guava, Hibernate
-
 These instrumentations are available with an additional dependency, like:
 
 ```xml
@@ -570,9 +574,7 @@ These instrumentations are available with an additional dependency, like:
 </dependency>
 ```
 
-The complete list of instrumentations supported by OpenTelemetry is available directly on their GitHub: [https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation).
-
-Other instrumentations might be offered by the community in other projects.
+You then have to register it from your code somehow depending on the library.
 
 -----
 

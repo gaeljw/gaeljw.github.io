@@ -9,9 +9,9 @@ description: Concrete steps & tips to migrate your JVM applications from Prometh
 
 -----
 
-_2024-02: updated for OpenTelemetry 1.35.x and JVM instrumentation 2.1.x. JVM metrics renamed._
+_2024-02: updated for OpenTelemetry 1.35.x and JVM instrumentation 2.1.x (JVM metrics renamed), add documentation about automatic instrumentation._
 
-_2023-06: updated for OpenTelemetry 1.27.x. New runtime-telemetry module and JVM metrics renamed._
+_2023-06: updated for OpenTelemetry 1.27.x (new runtime-telemetry module and JVM metrics renamed)._
 
 _Content of this article has been written with the OpenTelemetry version 1.21.x available as of December 2022. Post a comment if you notice something obsolete at the time of reading._
 
@@ -59,14 +59,17 @@ Using OTLP and the OpenTelemetry Collector have benefits but this can be done as
 
 ## Auto instrumentation vs. manual instrumentation
 
-On the JVM, in the same manner as what is possible with Prometheus, OpenTelemetry can be used in two ways:
+On the JVM, OpenTelemetry can be used in two ways:
 
 - auto instrumentation: add OpenTelemetry JAR as a Java agent and let it automatically exposes metrics for the JVM and the frameworks/libraries your application is using.
-- manual instrumentation: if your application exposes custom metrics or you want more control
+- manual instrumentation: if your application exposes custom metrics and/or you want more control
 
-This article will focus on **manual instrumentation** as it’s the case where there is actually some work to do in your application.
+Manual instrumentation can be used in combination with auto instrumentation.
+You should always **start first with auto instrumentation** and complete with manual instrumentation if you need it.
 
-Note that even if you use manual instrumentation, you can easily add metrics that would have been exposed by the auto instrumentation mode. We’ll cover that below.
+Note that it's possible to not use auto instrumentation at all but some libraries support is only available in the auto instrumentation mode.
+
+This article will document both setups when applicable.
 
 ## API vs. SDK
 
@@ -75,9 +78,10 @@ OpenTelemetry instrumentation is built around the concept of API and SDK:
 - the API allows you to define metrics and how they are computed
 - the SDK allows you to define how metrics are processed and exposed
 
-If you are writing a library, you should only care about the API.
-
-If you are writing an application, you should use both the API and the SDK. Nevertheless, all your “business code” should only rely on the API and not the SDK. We will see below how this is achieved in practice.
+If you are writing:
+- a library, then you should only care about the API
+- an application and using auto instrumentation, then you should only care about the API
+- an application and using manual instrumentation only, then you should use both the API and the SDK. Nevertheless, all your “business code” should only rely on the API and not the SDK. We will see below how this is achieved in practice.
 
 -----
 
@@ -104,8 +108,16 @@ For instance, if you are using Maven, you can remove the following dependencies:
 </dependency>
 ```
 
-And add the following ones as a replacement:
+And add the following one as a replacement:
 
+```xml
+<dependency>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-api</artifactId>
+</dependency>
+```
+
+If not using auto-instrumentation, you may also add these ones:
 ```xml
 <dependency>
     <groupId>io.opentelemetry</groupId>
@@ -123,19 +135,31 @@ And add the following ones as a replacement:
 
 _Note: the exact list of dependencies (and versions) you are using might vary. Here I assumed Prometheus metrics were exposed through the bundled Prometheus HTTP server and you were exposing JVM metrics._
 
-As always, check out the latest available versions of OpenTelemetry dependencies. As it’s still the early days, there are frequent updates and additions.
+As always, check out the latest available versions of OpenTelemetry dependencies. There are frequent updates and additions.
+I recommend to use the BOM provided by OpenTelemetry to manage versions in your `dependencyManagement` section:
+```xml
+<dependency>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
+    <type>pom</type>
+</dependency>
+```
 
-Each dependency declared above plays a different role:
+Each dependency listed above plays a different role:
 
-- `opentelemetry-sdk` is the main dependency that will allow you to both define metrics and expose them. It’s a wrapper of other dependencies.
+- `opentelemetry-api` is the main dependency that will allow you to define metrics.
+
+    **Most of the time, you should only depend on this one.**
+
+- (manual instrumentation) `opentelemetry-sdk` is useful to expose metrics. It’s a wrapper of other dependencies.
     
-    It includes `opentelemetry-api`. If you are writing a library, you should depend only on the API.
+    It includes `opentelemetry-api`.
 
     It also includes `opentelemetry-sdk-trace`, `opentelemetry-sdk-logs`, `opentelemetry-sdk-metrics`, and `opentelemetry-sdk-common`. You could technically only depend on the last two if you won’t work with traces but only with metrics.
 
-- `opentelemetry-exporter-prometheus` is the dependency needed to expose metrics as a Prometheus Exporter. If we were to push metrics directly to OpenTelemetry Collector, this would not be needed.
+- (manual instrumentation) `opentelemetry-exporter-prometheus` is the dependency needed to expose metrics as a Prometheus Exporter. If we were to push metrics directly to OpenTelemetry Collector, this would not be needed.
 
-- `opentelemetry-runtime-telemetry-java17` is the equivalent of Prometheus’ `simpleclient_hotspot`: it will allow exposing JVM metrics. If you don’t care about JVM metrics, you can skip this one. There's also a `opentelemetry-runtime-telemetry-java8` if you're not using Java17+ yet.
+- (manual instrumentation) `opentelemetry-runtime-telemetry-java17` is the equivalent of Prometheus’ `simpleclient_hotspot`: it will allow exposing JVM metrics. If you don’t care about JVM metrics, you can skip this one. There's also a `opentelemetry-runtime-telemetry-java8` if you're not using Java17+ yet.
 
 ## JVM metrics
 
@@ -149,7 +173,27 @@ import io.prometheus.client.hotspot.DefaultExports
 DefaultExports.initialize();
 ```
 
-The same can be achieved with OpenTelemetry with the following code:
+As of the day of writing these lines, there are slightly less JVM metrics exposed by OpenTelemetry than by Prometheus but all the major are most useful are. This might be of course evolve quickly if the community asks for it.
+
+OpenTelemetry standardize the names of the metrics across languages and frameworks. As a consequence, the JVM metrics names are different between Prometheus and OpenTelemetry. See below a non-exhaustive mapping:
+
+| Prometheus                  | OpenTelemetry                                               |
+|-----------------------------|-------------------------------------------------------------|
+| `pool` (label)              | `pool_name`                                                 |
+| `jvm_buffer_pool_xxx`       | Not available yet in the public OTEL API (only in internal) |
+| `jvm_classes_xxx`           | `jvm_class_xxx`                                             |
+| `jvm_memory_pool_bytes_xxx` | `jvm_memory_xxx`                                            |
+| `jvm_memory_bytes_xxx`      | `jvm_memory_xxx`                                            |
+| `jvm_threads_xxx`           | `jvm_thread_xxx`                                            |
+| `jvm_gc_collection_xxx`     | `jvm_gc_xxx`                                                |
+
+### Auto instrumentation
+
+When using auto instrumentation, this will be provided out-of-the-box by OpenTelemetry java agent.
+
+### Manual instrumentation
+
+The same can be achieved with OpenTelemetry manual instrumentation using the following code:
 
 ```java
 import io.opentelemetry.api.OpenTelemetry
@@ -167,21 +211,6 @@ GarbageCollector.registerObservers(otel);
 One important thing to note here is that you will need an `OpenTelemetry` instance to register the JVM observers. We’ll get back to how to obtain this instance and best practices later.
 
 You can also notice we are talking about “**observers**” because these are metrics that will be “computed” only when asked for it. If you think of the memory instance, there is no metric that is continuously updated with the memory usage: it’s only when a value for the metric is asked (when Prometheus scrapes it for instance) that the value is actually computed or retrieved.
-
-As of the day of writing these lines, there are slightly less JVM metrics exposed by OpenTelemetry than by Prometheus but all the major are most useful are. This might be of course evolve quickly if the community asks for it.
-
-Lastly, OpenTelemetry also tries to standardize the names of the metrics across languages and frameworks. As a consequence, the JVM metrics names are different between Prometheus and OpenTelemetry. See below a non-exhaustive mapping:
-
-| Prometheus                  | OpenTelemetry                                               |
-|-----------------------------|-------------------------------------------------------------|
-| `pool` (label)              | `pool_name`                                                 |
-| `jvm_buffer_pool_xxx`       | Not available yet in the public OTEL API (only in internal) |
-| `jvm_classes_xxx`           | `jvm_class_xxx`                                             |
-| `jvm_memory_pool_bytes_xxx` | `jvm_memory_xxx`                                            |
-| `jvm_memory_bytes_xxx`      | `jvm_memory_xxx`                                            |
-| `jvm_threads_xxx`           | `jvm_thread_xxx`                                            |
-| `jvm_gc_collection_xxx`     | `jvm_gc_xxx`                                                |
-
 
 ## Custom metrics definition
 
@@ -258,7 +287,29 @@ HTTPServer prometheusServer = new HTTPServer(prometheusHttpPort);
 prometheusServer.close();
 ```
 
-With OpenTelemetry, you would do pretty much the same:
+### Auto instrumentation
+
+When using OpenTelemetry auto instrumentation, you only need to declare a JVM property or environment variable:
+
+```env
+# JVM properties
+otel.metrics.exporter=prometheus
+otel.exporter.prometheus.port=0.0.0.0 # Default value
+otel.exporter.prometheus.host=9464 # Default value
+
+# Environment variables
+OTEL_METRICS_EXPORTER=prometheus
+OTEL_EXPORTER_PROMETHEUS_HOST=0.0.0.0 # Default value
+OTEL_EXPORTER_PROMETHEUS_PORT=9464 # Default value
+```
+
+See [the reference documentation](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#prometheus-exporter).
+
+If later you’d like to send metrics to OpenTelemetry Collector rather than exposing them as a Prometheus HTTP server, you would only need to change these variables.
+
+### Manual instrumentation
+
+With OpenTelemetry manual instrumentation, you would do pretty much the same as with Prometheus:
 
 ```java
 import io.opentelemetry.exporter.prometheus.PrometheusHttpServer
@@ -272,13 +323,72 @@ prometheusServer.close();
 
 The only difference is that if you do nothing more, there’s nothing that “connects” all the metrics we defined previously and this Prometheus HTTP server.
 
-We need to configure OpenTelemetry (SDK) to tie all this together.
+In manual instrumentation, we need to configure OpenTelemetry (SDK) to tie all this together.
 
 ## Tying it all together
 
-So far we’ve seen how to define and use metrics as well as how to create a Prometheus exporter but with OpenTelemetry we need something to glue all this together.
+This part only makes sense if you are building an application. If you’re building a library, this is not your concern.
 
-This part only makes sense if you are building an application and using the OpenTelemetry SDK. If you’re building a library, this is not your concern.
+### Auto instrumentation only
+
+When using only auto instrumentation, you don't have anything to do more except declare your application name:
+
+```env
+# JVM properties
+service.name="my-super-app"
+
+# Environment variable
+OTEL_SERVICE_NAME="my-super-app"
+```
+
+### Auto instrumentation with custom metrics
+
+If you're using auto instrumentation but also have custom metrics (as we've seen above), you may have noticed that we have been referring to an `OpenTelemetry` instance previously but we still haven't defined it.
+
+It will actually be defined by the java agent and made available by using `GlobalOpenTelemetry.get()`. It is recommended to only call it once though and pass the reference wherever you need it.
+
+For instance if you use Dependency Injection, you would make `OpenTelemetry` injectable where needed and the piece of code calling the `GlobalOpenTelemetry` could be a `Provider<OpenTelemetry>` :
+
+```java
+import io.opentelemetry.api.OpenTelemetry
+
+class MyMetrics {
+
+  @Inject
+  private OpenTelemetry otel;
+
+  Meter meter = otel.getMeter("com.mycompany.myapp");
+
+  // ... code defining metrics
+
+}
+
+import io.opentelemetry.api.GlobalOpenTelemetry
+
+class OpenTelemetryService implements Provider<OpenTelemetry> {
+
+  private OpenTelemetry globalOpenTelemetry = GlobalOpenTelemetry.get();
+
+  public OpenTelemetry get() = {
+    return globalOpenTelemetry;
+  }
+
+}
+```
+
+As in auto instrumentation only mode, you need to declare your application name:
+
+```env
+# JVM properties
+service.name="my-super-app"
+
+# Environment variable
+OTEL_SERVICE_NAME="my-super-app"
+```
+
+### Full manual instrumentation
+
+In full manual instrumentation, we need something to glue all the pieces we've seen before together.
 
 Here is the code that we need to add:
 
@@ -346,8 +456,6 @@ class OpenTelemetryService implements Provider<OpenTelemetry> {
 
 }
 ```
-
-Note that there’s also a “global instance” of `OpenTelemetry` which is made available by the `GlobalOpenTelemetry` class. However it’s recommended to not use it as it might hide issues due to initialization order of the several pieces that rely on it, especially if you are using auto-instrumentation as well.
 
 -----
 
@@ -425,6 +533,26 @@ Gauges still exist in OpenTelemetry for other use cases.
 ## Adding libraries or frameworks metrics
 
 A lot of libraries and frameworks can be instrumented in the same way that we added JVM metrics previously.
+
+### Auto instrumentation
+
+Metrics of the libraries or frameworks you use will be exposed automatically.
+
+However you can still remove or enable them one by one if you prefer via JVM properties or environment variables. See [the reference documentation](https://opentelemetry.io/docs/languages/java/automatic/configuration/#suppressing-specific-auto-instrumentation).
+
+For instance:
+
+```env
+# JVM property
+otel.instrumentation.[name].enabled=false
+otel.instrumentation.akka-actor.enabled=false
+
+# Environment variable
+OTEL_INSTRUMENTATION_[name]_ENABLED=false
+OTEL_INSTRUMENTATION_AKKA_ACTOR_ENABLED=false
+```
+
+### Manual instrumentation
 
 For instance:
 

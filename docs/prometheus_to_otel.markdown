@@ -9,6 +9,8 @@ description: Concrete steps & tips to migrate your JVM applications from Prometh
 
 -----
 
+_2024-04: remove custom handling of histogram buckets, now supported by OpenTelemetry API natively._
+
 _2024-02: updated for OpenTelemetry 1.35.x and JVM instrumentation 2.1.x (JVM metrics renamed), add documentation about automatic instrumentation._
 
 _2023-06: updated for OpenTelemetry 1.27.x (new runtime-telemetry module and JVM metrics renamed)._
@@ -463,7 +465,7 @@ class OpenTelemetryService implements Provider<OpenTelemetry> {
 
 ## Histograms
 
-As of the day of writing these lines, histograms are slightly more complex to migrate.
+_Note that in early versions of OpenTelemetry, it was not possible to define the histogram buckets when defining the histograms._
 
 Let’s see an example with Prometheus:
 
@@ -480,7 +482,9 @@ Histogram myHistogram = Histogram
 myHistogram.labels("someLabelValue").observe(100d);
 ```
 
-With OpenTelemetry, the histogram buckets cannot be specified when creating the histogram itself. The buckets are specified at the SDK level when tying everything together.
+With OpenTelemetry, the histogram buckets are defined as an "advice". An "advice" is meant as a suggestion that may be overriden later at the OpenTelemetry SDK level if needed.
+
+This look's like the following:
 
 ```java
 // Defining the histogram
@@ -489,40 +493,12 @@ LongHistogram myHistogram = meter
   .setDescription("Histogram of something")
   .setUnit("something")
   .ofLongs()
+  .setExplicitBucketBoundariesAdvice(Arrays.asList(1, 10, 100, ...))
   .build();
 
 // Using the histogram
 myHistogram.record(100, Attributes.of("someLabel", "someLabelValue"));
-
-// Defining the buckets (when instantiating the MeterProvider, in the class glueing everything)
-SdkMeterProvider meterProvider = SdkMeterProvider
-  .builder()
-  .setResource(myAppResource)
-  .registerMetricReader(prometheusServer)
-  // This line is necessary to create buckets
-  .registerView(
-    // Select which histogram(s) to match
-    InstrumentSelector
-      .builder()
-      .setType(InstrumentType.HISTOGRAM)
-      .setName("myapp_myhistogram")
-      .build(),
-    // Declare the buckets
-    View
-      .builder()
-      .setAggregation(Aggregation.explicitBucketHistogram(Arrays.asList(1, 10, 100, 1000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000)))
-      .build()
-  )
-  .build();
 ```
-
-You have to register a “**view**” and a selector to choose on which “instruments” (counter, gauges, histograms…) it will be applied. In the example above, the selector match our histogram by its type and its name. Other selectors exist, for matching with regex for instance.
-
-The idea behind this design is that the person that creates the instrument (the histogram in our case) is not necessarily the one that operates it. Defining the best buckets can depend on the context, especially for libraries.
-
-However, when the person creating the instrument and operating it is the same, this creates the amount of complexity we’ve seen above. For this reason, there is an ongoing discussion to review this design and allow defining buckets at the histogram definition. This would be achieved using what is likely to be called a “hint”: the creator of the instrument could define what are the buckets for majority of use case and still let the ability to the operator to override it with the system of “views”.
-
-> _You can follow this discussion and the progress on the following GitHub issue: [https://github.com/open-telemetry/opentelemetry-specification/issues/2229](https://github.com/open-telemetry/opentelemetry-specification/issues/2229)_
 
 ## UpDownCounters (Gauges)
 

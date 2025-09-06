@@ -30,7 +30,7 @@ This preset will suggest changes similar to the following:
 
 **preset.json5**:
 
-```json5
+```json
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "customManagers": [

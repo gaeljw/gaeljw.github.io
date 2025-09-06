@@ -42,7 +42,7 @@ This preset will suggest changes similar to the following:
 
 **preset.json5**:
 
-```json5
+```json
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "description": "Configure Renovate to suggest upgrades to the Scalafmt version set in Spotless plugin parameters. In same PR as .scalafmt.conf file.",

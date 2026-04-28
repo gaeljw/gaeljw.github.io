@@ -21,3 +21,7 @@ layout: default
 ## Observability
 
 - [Migrating a JVM application from Prometheus metrics to OpenTelemetry](./prometheus_to_otel.markdown)
+
+## Conferences
+
+- [Devoxx France 2026 : ce que je retiens](./devoxx2026.markdown) (French 🇫🇷)

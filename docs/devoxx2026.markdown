@@ -23,7 +23,7 @@ Les 4 keynotes auxquelles j'ai assisté portaient sur ce sujet avec des angles a
 
 ### Le code devient moins important
 
-[Nicolas Grenié](https://nicolasgrenie.com/) (Developer Advocate), qui n'a plus écrit une seule ligne depuis un an, fait ce constat : les ingénieurs que nous sommes se transforment en "**ingénieurs avec un esprit produit**". Le code devient secondaire. La valeur d'un développeur est dans sa capacité à co-construire le produit avec les utilisateurs et/ou les équipes métier.
+Nicolas Grenié (Developer Advocate chez Typeform), qui n'a plus écrit une seule ligne depuis un an, fait ce constat : les ingénieurs que nous sommes se transforment en "**ingénieurs avec un esprit produit**". Le code devient secondaire. La valeur d'un développeur est dans sa capacité à co-construire le produit avec les utilisateurs et/ou les équipes métier.
 
 L'IA accélère notre capacité à prototyper. Cela permet de prendre des décisions produit pertinentes sans engager des développements coûteux. **Le cycle de développement devient "prompt -> prototypage -> décision"** là où, avant, c'était "spécifications -> ticket -> implémentation -> démonstration".
 
@@ -133,3 +133,17 @@ Ensuite, d'autres éléments :
 - utiliser la couleur avec parcimonie pour mettre en valeur les indicateurs demandant une action immédiate, éviter le sapin de Noël !
 
 Enfin, Kamila nous partage une très bonne référence pour choisir **la bonne visualisation en fonction du message que l'on souhaite faire passer : le [Visual Vocabulary du Financial Times](https://ft-interactive.github.io/visual-vocabulary/)**.
+
+-----
+
+Références (vidéos à venir quand elles seront disponibles) :
+- _Le développeur face à l'IA : du prototypage rapide à la fin des intermédiaires ?_, Nicolas Grenié ([X](https://x.com/picsoung), [LinkedIn](https://linkedin.com/in/nicolasgrenie))
+- _L’IA sur le terrain : l’humain au cœur de la valeur_, Marjory Cannone ([LinkedIn](https://fr.linkedin.com/in/marjory-canonne-7aab19153))
+- _Astérix et les irréductibles positifs au service des communautés de pratique_, Edwige Fiaclou ([LinkedIn](https://linkedin.com/in/edfiaclou/)) et Pauline Cresson ([LinkedIn](https://linkedin.com/in/pauline-cresson))
+- _AI Security, from PoC to production_, Boussad Addad ([LinkedIn](AI Security, from PoC to production)) et Hugo Béchu ([LinkedIn](https://linkedin.com/in/hugo-b%C3%A9chu))
+- _Domptez vos Agents : AGENTS.md et Context Engineering pour une IA déterministe_, Benoît Fontaine ([LinkedIn](https://linkedin.com/in/b-fontaine/))
+- _L'IA au défi de la condition humaine_, Jean-Gabriel Ganascia
+- _La course à l’IA : La France risque-t-elle de devenir un "territoire servant"?_, Loup Cellard
+- _Les Value Types ne sont pas ℂomplexes_, Clément de Tastes ([LinkedIn](https://linkedin.com/in/clement-de-tastes), [BlueSky](https://bsky.app/profile/cdetastes.bsky.social)) et Rémi Forax
+- _Prolongez la vie de vos dashboards : Guide de survie anti-sapin de Noël_, Kamila Giedrojc ([LinkedIn](https://linkedin.com/in/kamilagiedrojc))
+- _Éloge de la simplicité_, Frédéric Leguédois ([LinkedIn](https://linkedin.com/in/fr%C3%A9d%C3%A9ric-legu%C3%A9dois))

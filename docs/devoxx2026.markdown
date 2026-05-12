@@ -136,14 +136,14 @@ Enfin, Kamila nous partage une très bonne référence pour choisir **la bonne v
 
 -----
 
-Références (vidéos à venir quand elles seront disponibles) :
-- _Le développeur face à l'IA : du prototypage rapide à la fin des intermédiaires ?_, Nicolas Grenié ([X](https://x.com/picsoung), [LinkedIn](https://linkedin.com/in/nicolasgrenie))
-- _L’IA sur le terrain : l’humain au cœur de la valeur_, Marjory Cannone ([LinkedIn](https://fr.linkedin.com/in/marjory-canonne-7aab19153))
-- _Astérix et les irréductibles positifs au service des communautés de pratique_, Edwige Fiaclou ([LinkedIn](https://linkedin.com/in/edfiaclou/)) et Pauline Cresson ([LinkedIn](https://linkedin.com/in/pauline-cresson))
-- _AI Security, from PoC to production_, Boussad Addad ([LinkedIn](AI Security, from PoC to production)) et Hugo Béchu ([LinkedIn](https://linkedin.com/in/hugo-b%C3%A9chu))
-- _Domptez vos Agents : AGENTS.md et Context Engineering pour une IA déterministe_, Benoît Fontaine ([LinkedIn](https://linkedin.com/in/b-fontaine/))
-- _L'IA au défi de la condition humaine_, Jean-Gabriel Ganascia
-- _La course à l’IA : La France risque-t-elle de devenir un "territoire servant"?_, Loup Cellard
-- _Les Value Types ne sont pas ℂomplexes_, Clément de Tastes ([LinkedIn](https://linkedin.com/in/clement-de-tastes), [BlueSky](https://bsky.app/profile/cdetastes.bsky.social)) et Rémi Forax
-- _Prolongez la vie de vos dashboards : Guide de survie anti-sapin de Noël_, Kamila Giedrojc ([LinkedIn](https://linkedin.com/in/kamilagiedrojc))
-- _Éloge de la simplicité_, Frédéric Leguédois ([LinkedIn](https://linkedin.com/in/fr%C3%A9d%C3%A9ric-legu%C3%A9dois))
+Références :
+- _Le développeur face à l'IA : du prototypage rapide à la fin des intermédiaires ?_, Nicolas Grenié ([X](https://x.com/picsoung), [LinkedIn](https://linkedin.com/in/nicolasgrenie)) ; [YouTube](https://youtu.be/3xgi_ULQMgc?si=PJ3esJpAyoJbYTva)
+- _L’IA sur le terrain : l’humain au cœur de la valeur_, Marjory Cannone ([LinkedIn](https://fr.linkedin.com/in/marjory-canonne-7aab19153)) ; [YouTube](https://youtu.be/h2CECLQl4nU?si=iIn_IaknxfztmSwL)
+- _Astérix et les irréductibles positifs au service des communautés de pratique_, Edwige Fiaclou ([LinkedIn](https://linkedin.com/in/edfiaclou/)) et Pauline Cresson ([LinkedIn](https://linkedin.com/in/pauline-cresson)) ; [YouTube](https://youtu.be/H3h_yxfWdHc?si=Z9Y3jrPXcyVfblKM)
+- _AI Security, from PoC to production_, Boussad Addad ([LinkedIn](AI Security, from PoC to production)) et Hugo Béchu ([LinkedIn](https://linkedin.com/in/hugo-b%C3%A9chu)) ; [YouTube](https://youtu.be/ADSVRn0Y_Vw?si=G7EvsduF8rR3VM8e)
+- _Domptez vos Agents : AGENTS.md et Context Engineering pour une IA déterministe_, Benoît Fontaine ([LinkedIn](https://linkedin.com/in/b-fontaine/)) ; [YouTube](https://youtu.be/l_heE0CQQxg?si=QLZn9YcwEE2_Wdym)
+- _L'IA au défi de la condition humaine_, Jean-Gabriel Ganascia ; [YouTube](https://youtu.be/fg6DDchoxG8?si=Nliq9HPetesMkpra)
+- _La course à l’IA : La France risque-t-elle de devenir un "territoire servant"?_, Loup Cellard ; [YouTube](https://youtu.be/YNaiLUpzlso?si=qVgUQ_MujbT5NUQf)
+- _Les Value Types ne sont pas ℂomplexes_, Clément de Tastes ([LinkedIn](https://linkedin.com/in/clement-de-tastes), [BlueSky](https://bsky.app/profile/cdetastes.bsky.social)) et Rémi Forax ; [YouTube](https://youtu.be/4xGexqdLb3Q?si=csGcsskAZMlidFHc)
+- _Prolongez la vie de vos dashboards : Guide de survie anti-sapin de Noël_, Kamila Giedrojc ([LinkedIn](https://linkedin.com/in/kamilagiedrojc)) ; [YouTube](https://youtu.be/kn_c0kfBX0I?si=n9c5YqYF5nKy71Hd)
+- _Éloge de la simplicité_, Frédéric Leguédois ([LinkedIn](https://linkedin.com/in/fr%C3%A9d%C3%A9ric-legu%C3%A9dois)) ; [YouTube](https://youtu.be/7MpLQLKIjG0?si=vTDvTJnoFwuoGMqf)
